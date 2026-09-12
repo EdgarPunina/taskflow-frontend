@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { TOKEN_KEY } from '../services/api';
 
 export default function PrivateRoute({ children }) {
+  // Revisar la sesión también al navegar entre rutas hash sin recargar la página.
+  useLocation();
   const token = localStorage.getItem(TOKEN_KEY);
   useEffect(() => {
     const changed = (event) => {

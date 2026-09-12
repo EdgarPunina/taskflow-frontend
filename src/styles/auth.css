@@ -1,0 +1,26 @@
+.auth-layout { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+.auth-story { background: #edf0fb; padding: 48px 9%; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+.auth-story::after { content: ''; position: absolute; width: 400px; height: 400px; border: 1px solid #dbe1f6; border-radius: 50%; right: -250px; top: 65px; pointer-events: none; }
+.story-content { margin: auto 0; padding: 60px 0 45px; max-width: 490px; }
+.story-content h1 { font-size: clamp(32px, 3.4vw, 49px); line-height: 1.25; letter-spacing: -2px; margin: 20px 0; font-weight: 800; }
+.story-content h1 span { color: #3654de; }
+.story-content p { max-width: 380px; line-height: 1.85; color: #64728d; font-size: 15px; }
+.story-footer { font-size: 12px; color: #78859b; }
+.flow-illustration { margin-top: 42px; display: flex; gap: 12px; transform: rotate(-3deg); }
+.flow-illustration > div { flex: 1; background: #ffffffc9; min-width: 0; border: 1px solid #dfe5f5; border-radius: 11px; padding: 15px 12px; color: #68748e; font-size: 11px; font-weight: 700; box-shadow: 0 8px 20px #34478b06; }
+.flow-illustration i { display: block; height: 32px; background: #fff; border: 1px solid #e9edf5; border-radius: 6px; margin-top: 11px; }
+.flow-illustration i + i { width: 80%; }
+.flow-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px; background: #94a1b8; }
+.flow-dot.progress { background: #5b78e6; }
+.flow-dot.done { background: #51a48e; }
+.flow-check { display: block; color: #35937c; text-align: right; margin-top: 8px; }
+.auth-panel { background: #fff; display: flex; align-items: center; justify-content: center; padding: 50px 32px; }
+.auth-card { max-width: 390px; width: 100%; }
+.auth-card h2 { font-size: 29px; letter-spacing: -1px; line-height: 1.35; margin: 16px 0 10px; }
+.auth-subtitle { color: #778096; font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
+.auth-card form { display: flex; flex-direction: column; gap: 10px; }
+.auth-card label { font-size: 13px; font-weight: 700; margin-top: 8px; }
+.auth-card .primary { margin-top: 16px; width: 100%; justify-content: space-between; }
+.auth-card small { color: #778096; font-size: 12px; }
+.auth-switch { text-align: center; color: #778096; font-size: 13px; margin-top: 28px; }
+.auth-card { animation: fadeIn .35s ease-out; }

@@ -20,7 +20,7 @@ api.interceptors.response.use((response) => response, (error) => {
   if (error.response?.status === 401 && token &&
       error.config?.headers?.Authorization === `Bearer ${token}`) {
     localStorage.removeItem(TOKEN_KEY);
-    window.location.replace('/login?session=expired');
+    window.location.replace(`${window.location.pathname}${window.location.search}#/login?session=expired`);
   }
   return Promise.reject(error);
 });

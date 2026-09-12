@@ -1,0 +1,45 @@
+@import '@fontsource/dm-sans/latin-400.css';
+@import '@fontsource/dm-sans/latin-500.css';
+@import '@fontsource/dm-sans/latin-700.css';
+@import '@fontsource/manrope/latin-700.css';
+@import '@fontsource/manrope/latin-800.css';
+@import './auth.css';
+@import './dashboard.css';
+@import './board.css';
+:root { --status-pending: #a0abc0; --status-progress: #5876e2; --status-done: #44a08a; }
+
+:root { font-family: 'DM Sans', system-ui, sans-serif; color: #25304a; background: #f6f7fb; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input { font: inherit; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; transition: background .15s, transform .15s; }
+button:disabled { opacity: .55; cursor: wait; }
+button:focus-visible, a:focus-visible { outline: 3px solid #8a9cff; outline-offset: 4px; }
+a { color: #304cde; font-weight: 700; text-decoration: none; }
+a:hover { text-decoration: underline; }
+input { border: 1px solid #dfe3ed; border-radius: 9px; background: #fff; padding: 13px 14px; width: 100%; min-width: 0; color: #25304a; transition: border-color .15s; }
+input:focus { outline: 3px solid #e8ecff; border-color: #6276e7; }
+input::placeholder { color: #8790a5; }
+input:disabled { background: #f5f6f9; }
+h1, h2, h3, .brand { font-family: 'Manrope', system-ui, sans-serif; }
+.primary { display: inline-flex; justify-content: center; align-items: center; gap: 20px; border: 0; border-radius: 9px; background: #304cde; color: white; padding: 13px 23px; font-weight: 700; box-shadow: 0 3px 6px #304cde12; }
+.primary:hover:not(:disabled) { background: #253ec0; }
+.brand { display: inline-flex; align-items: center; font-size: 25px; font-weight: 800; letter-spacing: -1px; white-space: nowrap; }
+.brand-dot { color: #4967ef; }
+.brand-mark { display: flex; align-items: center; gap: 3px; margin-right: 10px; background: #304cde; width: 31px; height: 33px; padding: 7px; border-radius: 8px; transform: rotate(-3deg); }
+.brand-mark i { width: 4px; border-radius: 3px; height: 15px; background: #fff; }
+.brand-mark i:nth-child(2) { height: 10px; align-self: flex-start; }
+.brand-mark i:nth-child(3) { height: 7px; align-self: flex-end; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #677692; }
+.error, .notice { padding: 13px 16px; border: 1px solid #f0cdcd; border-radius: 8px; font-size: 13px; line-height: 1.6; background: #fff4f3; color: #a13338; margin: 16px 0; }
+.notice { border-color: #d3def6; background: #f1f5ff; color: #355486; }
+.error .text-button { margin-left: 12px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 1000px) { .workspace-label { display: none; } .auth-story { padding: 36px 8%; } .columns { gap: 12px; } .column { padding: 12px; } }
+@media (max-width: 700px) { .auth-layout { display: block; } .auth-story { padding: 22px 26px; } .story-content, .story-footer { display: none; } .auth-panel { padding: 42px 26px; min-height: calc(100vh - 80px); align-items: flex-start; } .auth-card { max-width: 440px; } .topbar { padding: 18px 20px; gap: 12px; } .topbar .brand { font-size: 21px; } .account-name { display: none; } .avatar { display: none; } .dashboard { padding: 30px 20px; } .page-heading h1 { font-size: 30px; } .page-heading p { max-width: 320px; } .columns { grid-template-columns: 1fr; gap: 20px; } .column { min-height: 235px; padding: 16px; } .empty-column { padding: 26px 5px; } .progress-summary { display: none; } .new-task { padding-left: 8px; gap: 4px; } .new-task > span { display: none; } .new-task input { font-size: 13px; } .new-task .primary { padding: 12px; } .workspace-footer span { font-size: 10px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+@media (max-width: 700px) { .detail-panel { padding: 20px; } .detail-title { font-size: 22px; } .detail-actions { flex-wrap: wrap; } }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }

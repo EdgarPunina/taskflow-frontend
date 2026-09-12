@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
+import { appUrl } from './urls.js';
 
 const API = process.env.API_URL || 'http://localhost:8000/api';
 let token;
@@ -16,7 +17,7 @@ test.beforeEach(async ({ page, request }) => {
   } });
   expect(created.status()).toBe(201);
   task = (await created.json()).data;
-  await page.goto('/login');
+  await page.goto(appUrl('/login'));
   await page.evaluate((value) => localStorage.setItem('taskflow_token', value), token);
 });
 
@@ -33,7 +34,7 @@ test.afterEach(async ({ request }) => {
 test('detalle desde tarjeta y edición persisten al recargar y volver al tablero', async ({ page, request }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('/dashboard');
+  await page.goto(appUrl('/dashboard'));
   await page.getByRole('link', { name: task.title }).click();
   await expect(page).toHaveURL(new RegExp(`/tasks/${task.id}$`));
   await expect(page.getByRole('heading', { name: task.title })).toBeVisible();
@@ -46,8 +47,8 @@ test('detalle desde tarjeta y edición persisten al recargar y volver al tablero
   await page.getByLabel('Título', { exact: true }).fill('Entregar la tarea 3 de TaskFlow');
   await page.getByLabel('Descripción', { exact: false }).fill('Detalle y edición listos.\nCompartir el enlace de mi rama personal.');
   await page.getByLabel('Estado', { exact: true }).selectOption('en_progreso');
-  fs.mkdirSync('docs/evidencia/tarea3', { recursive: true });
-  await page.screenshot({ path: 'docs/evidencia/tarea3/editar-desktop.png', fullPage: true });
+  fs.mkdirSync('docs/evidencia/sesion07/tarea3', { recursive: true });
+  await page.screenshot({ path: 'docs/evidencia/sesion07/tarea3/editar-desktop.png', fullPage: true });
   await page.getByRole('button', { name: 'Guardar cambios' }).click();
   await expect(page).toHaveURL(new RegExp(`/tasks/${task.id}$`));
   await expect(page.getByRole('status')).toHaveText('Cambios guardados.');
@@ -56,7 +57,7 @@ test('detalle desde tarjeta y edición persisten al recargar y volver al tablero
   await expect(page.locator('.task-description')).toContainText('Compartir el enlace');
   const saved = await request.get(`${API}/tasks/${task.id}`, { headers: { Authorization: `Bearer ${token}` } });
   expect((await saved.json()).data).toMatchObject({ title: 'Entregar la tarea 3 de TaskFlow', status: 'en_progreso', user_id: task.user_id });
-  await page.screenshot({ path: 'docs/evidencia/tarea3/detalle-desktop.png', fullPage: true });
+  await page.screenshot({ path: 'docs/evidencia/sesion07/tarea3/detalle-desktop.png', fullPage: true });
   await page.getByRole('link', { name: 'Volver al tablero' }).click();
   await expect(page.getByRole('region', { name: 'En progreso', exact: true }).getByRole('article', { name: 'Entregar la tarea 3 de TaskFlow' })).toBeVisible();
   expect(errors).toEqual([]);
@@ -64,7 +65,7 @@ test('detalle desde tarjeta y edición persisten al recargar y volver al tablero
 
 test('cancelar conserva datos y la descripción puede borrarse; edición móvil funcional', async ({ page, request }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`/tasks/${task.id}/edit`);
+  await page.goto(appUrl(`/tasks/${task.id}/edit`));
   await page.getByLabel('Título', { exact: true }).fill('No guardar este título');
   await page.getByLabel('Descripción', { exact: false }).fill('No guardar esta descripción');
   await page.getByRole('button', { name: 'Cancelar' }).click();
@@ -74,7 +75,7 @@ test('cancelar conserva datos y la descripción puede borrarse; edición móvil 
   await page.getByLabel('Descripción', { exact: false }).fill('');
   await page.getByLabel('Estado', { exact: true }).selectOption('completada');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.screenshot({ path: 'docs/evidencia/tarea3/editar-movil.png', fullPage: true });
+  await page.screenshot({ path: 'docs/evidencia/sesion07/tarea3/editar-movil.png', fullPage: true });
   await page.getByRole('button', { name: 'Guardar cambios' }).click();
   await expect(page).toHaveURL(new RegExp(`/tasks/${task.id}$`));
   await page.reload();
@@ -85,7 +86,7 @@ test('cancelar conserva datos y la descripción puede borrarse; edición móvil 
 
 test('validación y fallo de guardado conservan el formulario; reintento de carga', async ({ page, request }) => {
   await page.route(`**/api/tasks/${task.id}`, (route) => route.abort('failed'));
-  await page.goto(`/tasks/${task.id}/edit`);
+  await page.goto(appUrl(`/tasks/${task.id}/edit`));
   await expect(page.getByRole('alert')).toContainText('No pudimos conectar');
   await page.unroute(`**/api/tasks/${task.id}`);
   await page.getByRole('button', { name: 'Reintentar' }).click();
@@ -116,14 +117,14 @@ test('detalle y edición rechazan tareas ajenas, inexistentes y visitas sin sesi
   try {
     await page.evaluate((value) => localStorage.setItem('taskflow_token', value), otherToken);
     for (const path of [`/tasks/${task.id}`, `/tasks/${task.id}/edit`, '/tasks/999999999']) {
-      await page.goto(path);
+      await page.goto(appUrl(path));
       await expect(page.getByRole('heading', { name: 'Tarea no disponible' })).toBeVisible();
       await expect(page.getByRole('heading', { name: task.title })).toHaveCount(0);
       await expect(page.getByRole('button', { name: 'Guardar cambios' })).toHaveCount(0);
     }
     await page.evaluate(() => localStorage.removeItem('taskflow_token'));
     for (const path of [`/tasks/${task.id}`, `/tasks/${task.id}/edit`]) {
-      await page.goto(path);
+      await page.goto(appUrl(path));
       await expect(page).toHaveURL(/\/login$/);
     }
   } finally { await request.post(`${API}/logout`, { headers: { Authorization: `Bearer ${otherToken}` } }); }

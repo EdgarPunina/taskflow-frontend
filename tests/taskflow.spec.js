@@ -1,12 +1,13 @@
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
+import { appUrl } from './urls.js';
 
 const API = process.env.API_URL || 'http://localhost:8000/api';
 const password = 'password123';
 const emailFor = (prefix) => `${prefix}.${Date.now()}.${Math.random().toString(36).slice(2, 7)}@example.com`;
 
 async function register(page, email, name = 'Ana') {
-  await page.goto('/register');
+  await page.goto(appUrl('/register'));
   await page.getByLabel('Nombre', { exact: true }).fill(name);
   await page.getByLabel('Correo electrónico').fill(email);
   await page.getByLabel('Contraseña', { exact: true }).fill(password);
@@ -16,7 +17,7 @@ async function register(page, email, name = 'Ana') {
 }
 
 async function login(page, email, pass = password) {
-  await page.goto('/login');
+  await page.goto(appUrl('/login'));
   await page.getByLabel('Correo electrónico').fill(email);
   await page.getByLabel('Contraseña', { exact: true }).fill(pass);
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
@@ -46,16 +47,16 @@ test('rutas privadas y desconocidas redirigen al login', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   for (const url of ['/', '/dashboard', '/ruta-inexistente']) {
-    await page.goto(url);
+    await page.goto(appUrl(url));
     await expect(page).toHaveURL(/\/login$/);
     await expect(page.getByRole('button', { name: 'Entrar', exact: true })).toBeVisible();
   }
   await page.getByRole('link', { name: 'Crear cuenta' }).click();
   await expect(page).toHaveURL(/\/register$/);
   expect(errors).toEqual([]);
-  fs.mkdirSync('docs/evidencia', { recursive: true });
-  await page.goto('/login');
-  await page.screenshot({ path: 'docs/evidencia/login-desktop.png', fullPage: true });
+  fs.mkdirSync('docs/evidencia/sesion07', { recursive: true });
+  await page.goto(appUrl('/login'));
+  await page.screenshot({ path: 'docs/evidencia/sesion07/login-desktop.png', fullPage: true });
 });
 
 test('registro, CRUD persistente, aislamiento entre cuentas y logout con API real', async ({ page, browser }) => {
@@ -102,7 +103,7 @@ test('registro, CRUD persistente, aislamiento entre cuentas y logout con API rea
     await addTask(page, 'Organizar las próximas tareas');
     await page.getByRole('article', { name: 'Revisar los entregables de la sesión' }).getByRole('button', { name: 'Avanzar' }).click();
     await expect(page.getByRole('region', { name: 'En progreso', exact: true }).getByRole('article')).toHaveCount(1);
-    await page.screenshot({ path: 'docs/evidencia/tablero-desktop.png', fullPage: true });
+    await page.screenshot({ path: 'docs/evidencia/sesion07/tablero-desktop.png', fullPage: true });
 
     await completed.getByRole('button', { name: `Eliminar ${title}` }).click();
     await expect(page.getByRole('article', { name: title })).toHaveCount(0);
@@ -132,7 +133,7 @@ test('errores de credenciales y correo duplicado se muestran sin perder el formu
   await login(page, email, 'incorrecta');
   await expect(page.getByRole('alert')).toContainText('correo o la contraseña');
   await expect(page.getByLabel('Correo electrónico')).toHaveValue(email);
-  await page.goto('/register');
+  await page.goto(appUrl('/register'));
   await page.getByLabel('Nombre', { exact: true }).fill('Duplicado');
   await page.getByLabel('Correo electrónico').fill(email);
   await page.getByLabel('Contraseña', { exact: true }).fill(password);
@@ -142,16 +143,16 @@ test('errores de credenciales y correo duplicado se muestran sin perder el formu
 });
 
 test('token inválido vuelve al login y una carga fallida permite reintentar', async ({ page }) => {
-  await page.goto('/login');
+  await page.goto(appUrl('/login'));
   await page.evaluate(() => localStorage.setItem('taskflow_token', 'token-invalido'));
-  await page.goto('/dashboard');
+  await page.goto(appUrl('/dashboard'));
   await expect(page).toHaveURL(/\/login\?session=expired$/);
   await expect(page.getByRole('status')).toContainText('Tu sesión terminó');
   expect(await page.evaluate(() => localStorage.getItem('taskflow_token'))).toBeNull();
   try {
     // Solo se simula la pérdida de red. Usuarios y operaciones siguen usando Laravel real.
     await page.route('**/api/tasks', (route) => route.abort('failed'));
-    await page.goto('/register');
+    await page.goto(appUrl('/register'));
     await page.getByLabel('Nombre', { exact: true }).fill('Recuperación');
     await page.getByLabel('Correo electrónico').fill(emailFor('red-ui'));
     await page.getByLabel('Contraseña', { exact: true }).fill(password);
@@ -179,6 +180,6 @@ test('tablero móvil sin desbordamiento y controles funcionales', async ({ page 
     await expect(page.getByRole('region', { name: 'En progreso', exact: true }).getByRole('article')).toHaveCount(1);
     await expect(page.getByRole('button', { name: 'Cerrar sesión' })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    await page.screenshot({ path: 'docs/evidencia/tablero-movil.png', fullPage: true });
+    await page.screenshot({ path: 'docs/evidencia/sesion07/tablero-movil.png', fullPage: true });
   } finally { await revokeAndClean(page); }
 });

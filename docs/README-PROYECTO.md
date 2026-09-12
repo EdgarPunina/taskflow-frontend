@@ -10,7 +10,7 @@ Tablero Kanban de Edgar Punina en React conectado a la API real de Laravel. Incl
 
 **Estado de publicaci?n:** c?digo y workflow preparados. GitHub rechaz? habilitar Pages porque el plan actual no lo admite en este repositorio privado. Falta un plan compatible o autorizaci?n del propietario para hacerlo p?blico; la URL prevista todav?a no constituye un despliegue verificado.
 
-![Tablero de TaskFlow](docs/evidencia/sesion07/tablero-desktop.png)
+![Tablero de TaskFlow](evidencia/sesion07/tablero-desktop.png)
 
 ## Stack y ejecuci?n local
 
@@ -86,4 +86,4 @@ No se suben dist, node_modules ni .env. Las variables VITE_* se incorporan a los
 
 ## Historial
 
-La sesi?n 06 y la Tarea 3 se integraron en main para la sesi?n 07. La rama personal tarea3-edgar conserva su entrega original. Consulta [sesi?n 06](docs/SESION-06.md) y [Tarea 3](docs/TAREA-3.md) para la evidencia previa.
+La sesi?n 06 y la Tarea 3 se integraron en main para la sesi?n 07. La rama personal tarea3-edgar conserva su entrega original. Consulta [sesi?n 06](SESION-06.md) y [Tarea 3](TAREA-3.md) para la evidencia previa.
