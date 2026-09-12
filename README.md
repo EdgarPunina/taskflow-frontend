@@ -1,5 +1,19 @@
 # TaskFlow frontend
 
+## Entrega personal: Tarea 3
+
+Esta rama añade la vista de detalle y edición de tareas en React.
+
+**Enlace de entrega:** https://github.com/EdgarPunina/taskflow-frontend/tree/tarea3-edgar
+
+Desde el tablero, pulsa el título de una tarea para ver su descripción, estado y fecha de creación.
+Pulsa **Editar tarea** para cambiar título, descripción y estado; **Guardar cambios** persiste
+los datos en Laravel y **Cancelar** vuelve al detalle sin guardar.
+
+Consulta [docs/TAREA-3.md](docs/TAREA-3.md) para las rutas, componentes, pruebas y capturas.
+
+## Proyecto de la sesión 06
+
 Tablero Kanban en React conectado a la API real de Laravel Sanctum de las sesiones 04 y 05. Implementa la práctica de la sesión 06: registro, login, tareas propias, creación, avance de estado, eliminación y ruta privada.
 
 Repositorio del equipo: [EdgarPunina/taskflow-frontend](https://github.com/EdgarPunina/taskflow-frontend) (privado).
@@ -63,7 +77,7 @@ npm.cmd run build
 npm.cmd run test:e2e
 ```
 
-Las cinco pruebas Playwright utilizan Chrome y la API real. Verifican rutas, registro, login, persistencia después de recargar, avance hasta completada, eliminación, aislamiento entre dos cuentas, revocación al cerrar sesión, validaciones, token inválido y diseño móvil. Solo se simula la pérdida de red en la prueba específica de recuperación; los usuarios, tareas y tokens se crean en Laravel.
+Las nueve pruebas Playwright utilizan Chrome y la API real. Las cinco pruebas originales verifican rutas, registro, login, persistencia después de recargar, avance hasta completada, eliminación, aislamiento entre dos cuentas, revocación al cerrar sesión, validaciones, token inválido y diseño móvil. Cuatro pruebas adicionales verifican detalle y edición, cancelación, descripción opcional, errores de guardado y protección de las nuevas rutas. Solo se simula la pérdida de red en las pruebas específicas de recuperación; los usuarios, tareas y tokens se crean en Laravel.
 
 Las pruebas crean usuarios de prueba únicos, eliminan sus tareas y revocan sus tokens. No uses una base de producción. Los resultados completos quedan en `test-results/`, excluido de Git; las capturas de evidencia se guardan en `docs/evidencia/`.
 
@@ -71,4 +85,4 @@ Las pruebas crean usuarios de prueba únicos, eliminan sus tareas y revocan sus 
 
 ## Entrega
 
-Consulta [docs/SESION-06.md](docs/SESION-06.md) para el análisis del instructivo, las comprobaciones y el estado de la entrega del equipo. El despliegue en GitHub Pages y la vista de detalle/edición de la Tarea 3 se describen en el PDF como trabajo de la siguiente entrega; esta implementación completa los pasos 0 a 7 de la práctica actual.
+Consulta [docs/SESION-06.md](docs/SESION-06.md) para el historial de la práctica del equipo. La vista de detalle y edición de la Tarea 3 se completó en esta rama personal; el despliegue de la sesión 07 corresponde a otra entrega.
