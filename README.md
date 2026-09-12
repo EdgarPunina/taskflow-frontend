@@ -1,5 +1,7 @@
 # TaskFlow — Frontend
 
+Práctica de sesión 08: [guía de revisión con agentes y confirmación antes de eliminar](docs/SESION-08.md). `src/components/Board.jsx` mantiene el estado compartido de las tareas y distribuye props y callbacks a las columnas.
+
 Tablero Kanban de Edgar Punina en React conectado a la API real de Laravel. Incluye registro, login, tareas por usuario, creación, avance, eliminación, detalle y edición con formularios controlados, useState y Axios.
 
 - Repositorio compartido del equipo: https://github.com/EdgarPunina/taskflow-frontend

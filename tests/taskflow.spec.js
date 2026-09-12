@@ -105,6 +105,19 @@ test('registro, CRUD persistente, aislamiento entre cuentas y logout con API rea
     await expect(page.getByRole('region', { name: 'En progreso', exact: true }).getByRole('article')).toHaveCount(1);
     await page.screenshot({ path: 'docs/evidencia/sesion07/tablero-desktop.png', fullPage: true });
 
+    let confirmation;
+    let deleteRequests = 0;
+    page.on('request', (request) => { if (request.method() === 'DELETE') deleteRequests++; });
+    page.once('dialog', async (dialog) => {
+      confirmation = { type: dialog.type(), message: dialog.message() };
+      await dialog.dismiss();
+    });
+    await completed.getByRole('button', { name: `Eliminar ${title}` }).click();
+    expect(confirmation).toEqual({ type: 'confirm', message: '¿Eliminar esta tarea?' });
+    await page.reload();
+    await expect(completed).toBeVisible();
+    expect(deleteRequests).toBe(0);
+    page.once('dialog', (dialog) => dialog.accept());
     await completed.getByRole('button', { name: `Eliminar ${title}` }).click();
     await expect(page.getByRole('article', { name: title })).toHaveCount(0);
     await page.reload();
@@ -164,6 +177,7 @@ test('token inválido vuelve al login y una carga fallida permite reintentar', a
     await expect(page.getByRole('alert')).toHaveCount(0);
     await addTask(page, 'Guardar incluso después de recuperar conexión');
     await page.route('**/api/tasks/*', (route) => route.abort('failed'));
+    page.once('dialog', (dialog) => dialog.accept());
     await page.getByRole('button', { name: 'Eliminar Guardar incluso después de recuperar conexión' }).click();
     await expect(page.getByRole('alert')).toContainText('No pudimos conectar');
     await expect(page.getByRole('article')).toHaveCount(1);
